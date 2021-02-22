@@ -30,7 +30,7 @@ macro_rules! ffi_dispatch(
     );
     ($handle: ident, $func: ident, $($arg: expr),*) => (
         // NOTE: this "dlopen" refers to a feature on the crate *using* dlib
-        ffi_dispatch!("dlopen", $handle, $func, $($arg),*)
+        dlib::ffi_dispatch!("dlopen", $handle, $func, $($arg),*)
     );
 );
 
@@ -61,7 +61,7 @@ macro_rules! ffi_dispatch_static(
         }
     );
     ($handle:ident, $name: ident) => (
-        ffi_dispatch_static!("dlopen", $handle, $name);
+        dlib::ffi_dispatch_static!("dlopen", $handle, $name);
     );
 );
 
@@ -163,12 +163,12 @@ macro_rules! dlopen_external_library(
         $(functions: $(fn $fname: ident($($farg: ty),*) -> $fret:ty),+,)|*
         $(varargs: $(fn $vname: ident($($vargs: ty),+) -> $vret: ty),+,)|*
     ) => (
-        dlopen_external_library!(__struct,
+        dlib::dlopen_external_library!(__struct,
             $structname, $(statics: $($sname: $stype),+,)|*
             $(functions: $(fn $fname($($farg),*) -> $fret),+,)|*
             $(varargs: $(fn $vname($($vargs),+) -> $vret),+,)|*
         );
-        dlopen_external_library!(__impl,
+        dlib::dlopen_external_library!(__impl,
             $structname, $(statics: $($sname: $stype),+,)|*
             $(functions: $(fn $fname($($farg),*) -> $fret),+,)|*
             $(varargs: $(fn $vname($($vargs),+) -> $vret),+,)|*
@@ -190,7 +190,7 @@ macro_rules! external_library(
         $(functions: $(fn $fname: ident($($farg: ty),*) -> $fret:ty),+,)|*
         $(varargs: $(fn $vname: ident($($vargs: ty),+) -> $vret: ty),+,)|*
     ) => (
-        dlopen_external_library!(
+        dlib::dlopen_external_library!(
             $structname, $(statics: $($sname: $stype),+,)|*
             $(functions: $(fn $fname($($farg),*) -> $fret),+,)|*
             $(varargs: $(fn $vname($($vargs),+) -> $vret),+,)|*
@@ -207,14 +207,14 @@ macro_rules! external_library(
         $(varargs: $(fn $vname: ident($($vargs: ty),+) -> $vret: ty),+,)|*
     ) => (
         #[cfg(feature = $feature)]
-        dlopen_external_library!(
+        dlib::dlopen_external_library!(
             $structname, $(statics: $($sname: $stype),+,)|*
             $(functions: $(fn $fname($($farg),*) -> $fret),+,)|*
             $(varargs: $(fn $vname($($vargs),+) -> $vret),+,)|*
         );
 
         #[cfg(not(feature = $feature))]
-        link_external_library!(
+        dlib::link_external_library!(
             $link, $(statics: $($sname: $stype),+,)|*
             $(functions: $(fn $fname($($farg),*) -> $fret),+,)|*
             $(varargs: $(fn $vname($($vargs),+) -> $vret),+,)|*
@@ -225,7 +225,7 @@ macro_rules! external_library(
         $(functions: $(fn $fname: ident($($farg: ty),*) -> $fret:ty),+,)|*
         $(varargs: $(fn $vname: ident($($vargs: ty),+) -> $vret: ty),+,)|*
     ) => (
-        external_library!(
+        dlib::external_library!(
             "dlopen", $structname, $link,
             $(statics: $($sname: $stype),+,)|*
             $(functions: $(fn $fname($($farg),*) -> $fret),+,)|*
