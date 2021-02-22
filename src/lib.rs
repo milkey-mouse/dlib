@@ -3,6 +3,11 @@ extern crate libloading;
 pub use libloading::{Library, Symbol};
 
 #[cfg(feature = "dlopen")]
+#[deprecated(
+    since = "0.5", // TODO: change to version of next release after 0.4.2
+    note = "dlib can now use a dlopen feature on your own crate: \
+            see https://github.com/vberger/dlib#remaining-generic-in-your-crate"
+)]
 #[macro_export]
 macro_rules! ffi_dispatch(
     ($handle: ident, $func: ident, $($arg: expr),*) => (
@@ -30,6 +35,11 @@ macro_rules! ffi_dispatch(
 );
 
 #[cfg(feature = "dlopen")]
+#[deprecated(
+    since = "0.5", // TODO: change to version of next release after 0.4.2
+    note = "dlib can now use a dlopen feature on your own crate: \
+            see https://github.com/vberger/dlib#remaining-generic-in-your-crate"
+)]
 #[macro_export]
 macro_rules! ffi_dispatch_static(
     ($handle: ident, $name: ident) => (
@@ -168,6 +178,11 @@ macro_rules! dlopen_external_library(
 );
 
 #[cfg(feature = "dlopen")]
+#[deprecated(
+    since = "0.5", // TODO: change to version of next release after 0.4.2
+    note = "dlib can now use a dlopen feature on your own crate: \
+            see https://github.com/vberger/dlib#remaining-generic-in-your-crate"
+)]
 #[macro_export]
 macro_rules! external_library(
     ($structname: ident, $link: expr,
